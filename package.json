@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "postcss-import": "^15.1.0"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.7",
+    "realm-web": "^2.0.0"
+  }
+}
