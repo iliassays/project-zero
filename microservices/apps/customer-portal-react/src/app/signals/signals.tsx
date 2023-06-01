@@ -3,7 +3,7 @@ import styles from './signals.module.css';
 
 import SignalCard from './components/signal-card'
 import { Signal } from './domain/signal';
-import {  useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import *  as  Realm from "realm-web";
 
 /* eslint-disable-next-line */
@@ -12,7 +12,7 @@ export interface SignalsProps { }
 export function Signals() {
   const [signals, setSignals] = useState<Signal[]>();
   const [user, setUser] = useState<unknown>();
-  
+
   const app = new Realm.App({ id: "data-lsbmb" });
 
   const loadSignalSummary = async () => {
@@ -21,16 +21,15 @@ export function Signals() {
 
     if (result.error) {
       setSignals([]);
+      //Write code for display error messages
     } else {
       setSignals(result);
     }
-
-   //
-  } 
+  }
 
   const setupSSEConnection = async () => {
 
-    if(!signals)
+    if (!signals)
       return;
     // Authenticate anonymously
     const user = await app.logIn(Realm.Credentials.anonymous());
@@ -43,46 +42,38 @@ export function Signals() {
     // Everytime a change happens in the stream, add it to the list of events
     if (collection) {
       for await (const change of collection.watch(
-        { fullDocument : "updateLookup" })) {
-          if(change.operationType === 'update' || change.operationType === 'insert')
-          {
-            let signal = signals?.find(s => s._id ===  change.fullDocument._id.toString());
+        { fullDocument: "updateLookup" })) {
+        if (change.operationType === 'update' || change.operationType === 'insert') {
+          let signal = signals?.find(s => s._id === change.fullDocument._id.toString());
 
-            if(!signal){
-              setSignals(signalss  => [...signals, change.fullDocument as Signal]);
-              //signal = change.fullDocument as Signal
-              //setSignals(signals);
-            }
-            else{
-
-              const updatedSignal = change.fullDocument as Signal;
-
-              signal = updatedSignal;
-              setSignals(prevArray => {
-                return prevArray?.map(obj => {
-                  if (obj._id === updatedSignal?._id.toString()) {
-                    return { ...obj, ...signal };
-                  }
-                  return obj;
-                });
-              });
-            }
+          if (!signal) {
+            setSignals(signalss => [...signals, change.fullDocument as Signal]);
           }
+          else {
+            const updatedSignal = change.fullDocument as Signal; //better to fetch only changed properties.
+            signal = updatedSignal;
+
+            setSignals(prevArray => {
+              return prevArray?.map(obj => {
+                if (obj._id === updatedSignal?._id.toString()) {
+                  return { ...obj, ...signal };
+                }
+
+                return obj;
+              });
+            });
+          }
+        }
       }
     }
-   }
+  }
 
   useEffect(() => {
-    
     loadSignalSummary();
-
   }, []);
 
 
-  // This useEffect hook will run only once when the page is loaded
-
   useEffect(() => {
-console.log('omg')
     setupSSEConnection();
   }, [signals]);
 
