@@ -17,7 +17,7 @@ export class RestartAllInactiveAlertJobController {
     );
   }
 
-  @Cron(CronExpression.EVERY_30_SECONDS)
+  @Cron(CronExpression.EVERY_MINUTE)
   async handleCron() {
     this.logger.debug('Called every minute.');
 
@@ -30,14 +30,11 @@ export class RestartAllInactiveAlertJobController {
     );
 
     match(result, {
-      Ok: (id: string) => this.logger.log(`Job successfully eecuted with: ${id}`),
+      Ok: (id: string) =>
+        this.logger.log(`Job successfully eecuted with: ${id}`),
       Err: (error: Error) => {
         this.logger.error(`Job failed with error:: ${error.message}`);
       },
     });
   }
-}
-
-function restartAllAlert() {
-  throw new Error('Function not implemented.');
 }

@@ -12,9 +12,9 @@ import { RequestContextService } from './application.request.context';
 export class ContextInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest();
-    const requestId = request?.body?.requestId ?? nanoid(6);
+    //const requestId = request?.body?.requestId ?? nanoid(6);
 
-    RequestContextService.setRequestId(requestId);
+    //RequestContextService.setRequestId(requestId);
 
     return next.handle().pipe(
       tap(() => {

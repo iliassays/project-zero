@@ -1,11 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
-import puppeteer, { Browser, executablePath } from 'puppeteer';
-
-import { accessSync, constants, writeFileSync } from 'fs';
+import puppeteer, { Browser, Page, executablePath } from 'puppeteer';
+import { accessSync, constants } from 'fs';
 import { mkdir } from 'fs/promises';
-
 import { join } from 'path';
-
 @Injectable()
 export class TradingviewService {
   constructor(private readonly logger: Logger) {
@@ -91,7 +88,7 @@ export class TradingviewService {
     });
   };
 
-  login = async (page, username, pass) => {
+  login = async (page: Page, username: string, pass: string) => {
     try {
       const emailSignInButton = await this.fetchFirstXPath(
         page,
@@ -116,41 +113,73 @@ export class TradingviewService {
     this.logger.log('typing password');
     await passwordInput.type(pass);
 
-    const submitButton = await this.fetchFirstXPath(
-      page,
-      "//button[contains(@class, 'button-D4RPB3ZC')]",
-    );
-    this.logger.log('clicking submit button');
+    await page.waitForSelector('.content-D4RPB3ZC > span');
+    await page.click('.content-D4RPB3ZC > span');
 
-    submitButton.click();
-    await this.waitForTimeout(5);
+    this.logger.log('submit button clicked');
   };
 
   restartAllInactiveAlert = async (page) => {
     try {
-      const alertPanelOpenerButton = await this.fetchFirstXPath(
-        page,
-        `//button[contains(@data-name, 'alerts')]`,
-        5000,
-      );
-      alertPanelOpenerButton.click();
-      await this.waitForTimeout(0.7);
+      const isNotShowingAlertPanel = async () => {
+        return !(await this.isXpathVisible(
+          page,
+          "//div[contains(@class, 'widgetbar-pages') and not(contains(@class, 'hidden'))]",
+        ));
+      };
+
+      if (await isNotShowingAlertPanel()) {
+        this.logger.warn('Not showing any alert panel');
+
+        const alertPanelOpenerButton = await this.fetchFirstXPath(
+          page,
+          `//button[contains(@data-name, 'alerts')]`,
+          5000,
+        );
+        alertPanelOpenerButton.click();
+        await this.waitForTimeout(0.7);
+
+        if (await !isNotShowingAlertPanel()) {
+          this.logger.log('Alert Pannel is showing');
+        }
+      }
     } catch (e) {
       this.logger.warn('No alert pannel openner button showing!');
     }
 
     await this.waitForTimeout(1);
-    this.logger.warn('Alert pannel opened...');
+    this.logger.log('Alert pannel opened...');
 
-    const isNotShowingAlertPanel = async () => {
-      return !(await this.isXpathVisible(
-        page,
-        "//div[contains(@class, 'widgetbar-pages') and not(contains(@class, 'hidden'))]",
-      ));
-    };
+    const alertPanelOpenerButton = await this.fetchFirstXPath(
+      page,
+      `//div[contains(@data-name, 'alerts-settings-button')]`,
+      5000,
+    );
+    alertPanelOpenerButton.click();
+    await this.waitForTimeout(0.5);
 
-    if (await isNotShowingAlertPanel()) {
-      this.logger.warn('Not showing any alert panel');
+    const restartAllInactiveMenuButton = await this.fetchFirstXPath(
+      page,
+      `//span[contains(@class, 'labelRow-jFqVJoPk')]`,
+      5000,
+    );
+
+    if (restartAllInactiveMenuButton) {
+      this.logger.log('restartAllInactiveMenuButton found...');
+      await restartAllInactiveMenuButton.click();
+      await this.waitForTimeout(0.5);
+    }
+
+    const restartAllInactivePopupYesButton = await this.fetchFirstXPath(
+      page,
+      `//button[contains(@class, 'actionButton-k53vexPa')]`,
+      5000,
+    );
+
+    if (restartAllInactivePopupYesButton) {
+      this.logger.log('restartAllInactivePopupYesButton found...');
+      await restartAllInactivePopupYesButton.click();
+      await this.waitForTimeout(0.5);
     }
   };
 

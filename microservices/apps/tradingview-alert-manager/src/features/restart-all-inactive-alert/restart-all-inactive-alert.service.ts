@@ -4,10 +4,9 @@ import { RestartAllInactiveAlertCommand } from './restart-all-inactive-alert.com
 import { Logger, Inject } from '@nestjs/common';
 import { AggregateId } from 'libs/ddd/aggregate-id';
 import { TradingviewService } from '../../tradingview-actions/tradingview.service';
-import puppeteer, { Browser, Page } from 'puppeteer';
+import { Browser, Page } from 'puppeteer';
 import tradingviewConfig from '../../configs/tradingview.config';
 import { ConfigType } from '@nestjs/config';
-import { chromium } from 'playwright';
 
 @CommandHandler(RestartAllInactiveAlertCommand)
 export class RestartAllInactiveAlertService
@@ -28,15 +27,15 @@ export class RestartAllInactiveAlertService
     let browser: Browser;
 
     try {
-      const headless = false;
-
-      browser = await this.tradingviewService.launchBrowser(
-        false,
-        `${this.tvConfig.url}#signin`,
-      );
+      const headless = true;
 
       let page: Page;
-      let accessDenied;
+      let accessDenied: boolean;
+
+      browser = await this.tradingviewService.launchBrowser(
+        headless,
+        `${this.tvConfig.url}#signin`,
+      );
 
       if (headless) {
         page = await browser.newPage();
@@ -68,10 +67,6 @@ export class RestartAllInactiveAlertService
             this.tvConfig.password,
           );
 
-          await page.goto(this.tvConfig.url, {
-            waitUntil: 'domcontentloaded',
-          });
-
           await page.waitForSelector('.widgetbar-pages');
 
           this.logger.log('Right toolbar loaded');
@@ -82,10 +77,12 @@ export class RestartAllInactiveAlertService
 
           await this.tradingviewService.waitForTimeout(1000000);
           await browser.close();
+
           process.exit(1);
         }
       }
 
+      await this.tradingviewService.waitForTimeout(5);
       await this.tradingviewService.restartAllInactiveAlert(page);
 
       await this.tradingviewService.waitForTimeout(5);
