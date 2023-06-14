@@ -60,9 +60,9 @@ export class TradingviewService {
     }
 
     this.logger.log(`Launching browser.....`);
-    return puppeteer.launch({
+    return await puppeteer.launch({
       executablePath: executablePath(),
-      headless: headless,
+      headless: headless ? 'new' : false,
       userDataDir,
       defaultViewport: {
         width: 1920,
@@ -99,6 +99,14 @@ export class TradingviewService {
       await this.waitForTimeout(1);
     } catch (e) {
       this.logger.warn('no email toggle button showing!');
+
+      // const loginLink = await this.fetchFirstXPath(
+      //   page,
+      //   `//a[contains(@class, 'js-login-link"')]`,
+      //   5000,
+      // );
+      // loginLink.click();
+      // await this.waitForTimeout(1);
     }
 
     const usernameInput = await this.fetchFirstXPath(
@@ -117,6 +125,7 @@ export class TradingviewService {
     await page.click('.content-D4RPB3ZC > span');
 
     this.logger.log('submit button clicked');
+    await this.waitForTimeout(1);
   };
 
   restartAllInactiveAlert = async (page) => {
@@ -137,7 +146,7 @@ export class TradingviewService {
           5000,
         );
         alertPanelOpenerButton.click();
-        await this.waitForTimeout(0.7);
+        await this.waitForTimeout(2);
 
         if (await !isNotShowingAlertPanel()) {
           this.logger.log('Alert Pannel is showing');
@@ -147,7 +156,7 @@ export class TradingviewService {
       this.logger.warn('No alert pannel openner button showing!');
     }
 
-    await this.waitForTimeout(1);
+    await this.waitForTimeout(4);
     this.logger.log('Alert pannel opened...');
 
     const alertPanelOpenerButton = await this.fetchFirstXPath(

@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import Signals from './trade';
+import { Trades } from './trade';
 
-describe('Signals', () => {
+describe('Trades', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Signals />);
+    const { baseElement } = render(<Trades />);
     expect(baseElement).toBeTruthy();
   });
 });

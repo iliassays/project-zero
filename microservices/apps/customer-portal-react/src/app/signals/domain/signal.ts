@@ -5,11 +5,12 @@ export interface Signal {
   alertByInterval: Record<string, Alert>,
   created_at?: string,
   updated_at?: string
-};
+}
 
 
 export interface Alert{
   tradeType: string,
-  price: Number,
-  timestamp: string
+  price: number,
+  timestamp: string,
+  timeAgo?: string
 }

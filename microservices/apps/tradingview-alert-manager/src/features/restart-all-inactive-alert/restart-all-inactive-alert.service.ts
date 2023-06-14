@@ -27,7 +27,7 @@ export class RestartAllInactiveAlertService
     let browser: Browser;
 
     try {
-      const headless = true;
+      const headless = false;
 
       let page: Page;
       let accessDenied: boolean;

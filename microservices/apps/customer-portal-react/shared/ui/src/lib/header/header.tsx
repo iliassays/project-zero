@@ -11,7 +11,9 @@ const user = {
 
 const navigations = [
   { name: 'Signals', href: '#', current: true },
-  { name: 'Statistics', href: '#', current: false },
+  { name: 'Trades', href: '/trade-history', current: true },
+  { name: 'Profit Calendar', href: '/trade/profit-calendar', current: true },
+  { name: 'Analytics', href: '#', current: false },
   { name: 'About', href: '#', current: false },
 ];
 

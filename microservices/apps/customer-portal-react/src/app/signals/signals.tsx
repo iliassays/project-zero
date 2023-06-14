@@ -1,4 +1,4 @@
-import { Banner } from '@customer-portal-react/shared/ui'
+import { Banner, PageHeader } from '@customer-portal-react/shared/ui'
 import styles from './signals.module.css';
 
 import SignalCard from './components/signal-card'
@@ -75,12 +75,20 @@ export function Signals() {
 
   useEffect(() => {
     setupSSEConnection();
-  }, [signals]);
+  }, []);
 
   return (
-    <ul className="divide-y divide-gray-100">
-      {signals?.map((signal) => <SignalCard key={signal._id} signal={signal} />)}
-    </ul>
+    <>
+      <PageHeader title="Signals"></PageHeader>
+      <main>
+        <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+          <ul className="divide-y divide-gray-100">
+            {signals?.map((signal) => <SignalCard key={signal._id} signal={signal} />)}
+          </ul>
+        </div>
+      </main>
+    </>
+
   )
 }
 
