@@ -27,6 +27,7 @@ const interval = [
 ]
 
 const tickers = [
+  { name: 'AI' },
   { name: 'TSLA' },
   { name: 'MARA' },
   { name: 'UPST' },
@@ -35,6 +36,8 @@ const tickers = [
   { name: 'GME' },
   { name: 'HOOD' },
   { name: 'COIN' },
+  { name: 'AAPL' },
+  { name: 'AFRM' },
   { name: 'BTCUSD' },
   { name: 'ETHUSD' }
 ]
