@@ -6,6 +6,7 @@ export interface TradeHistory {
   close: number,
   open: number,
   profitOrLoss: number,
+  status: string,
   tradeType: string,
   created_at?: string,
   updated_at?: string

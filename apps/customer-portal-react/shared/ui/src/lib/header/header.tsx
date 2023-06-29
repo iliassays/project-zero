@@ -12,7 +12,7 @@ const user = {
 const navigations = [
   { name: 'Signals', href: '#', current: true },
   { name: 'Trades', href: '/trade-history', current: true },
-  { name: 'Profit Calendar', href: '/trade/profit-calendar', current: true },
+  { name: 'Profit Calendar', href: '/profit-calendar', current: true },
   { name: 'Analytics', href: '#', current: false },
   { name: 'About', href: '#', current: false },
 ];

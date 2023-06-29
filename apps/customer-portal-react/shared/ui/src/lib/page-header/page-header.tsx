@@ -37,9 +37,10 @@ export function PageHeader({
           </h2>
           {analyticsComponent && <div>{analyticsComponent}</div>}
         </div> 
+        <div className="min-w-0 flex-1 text-right">
         {filterComponent && <div>{filterComponent}</div>}
+        </div> 
       </div>
-     
     </div>
   </header>
   );

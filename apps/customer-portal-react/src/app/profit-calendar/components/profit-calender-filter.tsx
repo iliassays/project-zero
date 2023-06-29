@@ -44,7 +44,7 @@ const tickers = [
   { name: 'ETHUSD' }
 ]
 
-const TradeFilter = (props) => {
+const ProfitCalanderFilter = (props) => {
 
   const {
     selectedTicker,
@@ -59,7 +59,7 @@ const TradeFilter = (props) => {
 
   return (
     <div className="mt-5 flex lg:ml-4 lg:mt-0">
-      <span className="ml-6 hidden sm:block">
+      <span className="ml-6 hidden sm:block flex: 1">
       <Listbox value={selectedTicker} onChange={setTicker}>
         <div className="relative mt-1">
           <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
@@ -112,7 +112,7 @@ const TradeFilter = (props) => {
       </Listbox>
       </span>
 
-      <span className="ml-6 hidden sm:block">
+      <span className="ml-6 hidden sm:block flex: 1">
       <Listbox value={selectedTradeType} onChange={setTradeType}>
         <div className="relative mt-1">
           <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
@@ -164,7 +164,7 @@ const TradeFilter = (props) => {
         </div>
       </Listbox>
       </span>
-      <span className="ml-6 hidden sm:block">
+      <span className="ml-6 hidden sm:block flex: 1">
       <Listbox value={selectedInterval} onChange={setInterval}>
         <div className="relative mt-1">
           <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
@@ -220,4 +220,4 @@ const TradeFilter = (props) => {
   );
 }
 
-export default TradeFilter;
+export default ProfitCalanderFilter;
