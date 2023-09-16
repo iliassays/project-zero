@@ -1,0 +1,17 @@
+{
+  "name": "project-zero",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    
+  },
+  "dependencies": {
+    "puppeteer-core": "^20.8.0"
+  },
+  "devDependencies": {
+    "puppeteer": "^20.8.0"
+  }
+}
